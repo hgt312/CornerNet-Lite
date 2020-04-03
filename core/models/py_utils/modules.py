@@ -94,7 +94,7 @@ class hg(nn.Module):
 
 class hg_net(nn.Module):
     def __init__(
-        self, hg, tl_modules, br_modules, tl_heats, br_heats, 
+        self, hg, tl_modules, br_modules, tl_heats, br_heats,
         tl_tags, br_tags, tl_offs, br_offs
     ):
         super(hg_net, self).__init__()
@@ -111,7 +111,7 @@ class hg_net(nn.Module):
 
         self.tl_tags = tl_tags
         self.br_tags = br_tags
-        
+
         self.tl_offs = tl_offs
         self.br_offs = br_offs
 
@@ -129,8 +129,8 @@ class hg_net(nn.Module):
         br_offs    = [br_off_(br_mod)  for br_off_,  br_mod in zip(self.br_offs,  br_modules)]
         return [tl_heats, br_heats, tl_tags, br_tags, tl_offs, br_offs]
 
-    def _test(self, *xs, **kwargs):
-        image = xs[0]
+    def _test(self, x, **kwargs):
+        image = x
         cnvs  = self.hg(image)
 
         tl_mod = self.tl_modules[-1](cnvs[-1])
@@ -141,12 +141,13 @@ class hg_net(nn.Module):
         tl_off,  br_off  = self.tl_offs[-1](tl_mod),  self.br_offs[-1](br_mod)
 
         outs = [tl_heat, br_heat, tl_tag, br_tag, tl_off, br_off]
-        return self._decode(*outs, **kwargs), tl_heat, br_heat, tl_tag, br_tag
+        # return self._decode(*outs, **kwargs), tl_heat, br_heat, tl_tag, br_tag
+        return outs
 
-    def forward(self, *xs, test=False, **kwargs):
-        if not test:
-            return self._train(*xs, **kwargs)
-        return self._test(*xs, **kwargs)
+    def forward(self, x, test=False, **kwargs):
+        # if not test:
+        #     return self._train(*xs, **kwargs)
+        return self._test(x, **kwargs)
 
 class saccade_module(nn.Module):
     def __init__(
@@ -226,7 +227,7 @@ class saccade(nn.Module):
 
 class saccade_net(nn.Module):
     def __init__(
-        self, hg, tl_modules, br_modules, tl_heats, br_heats, 
+        self, hg, tl_modules, br_modules, tl_heats, br_heats,
         tl_tags, br_tags, tl_offs, br_offs, att_modules, up_start=0
     ):
         super(saccade_net, self).__init__()

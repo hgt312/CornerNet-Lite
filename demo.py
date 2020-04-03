@@ -1,12 +1,12 @@
-#!/usr/bin/env python
+import torch
 
-import cv2
-from core.detectors import CornerNet_Saccade
-from core.vis_utils import draw_bboxes
+from core.models.CornerNet_Squeeze import model
 
-detector = CornerNet_Saccade()
-image    = cv2.imread("demo.jpg")
+net = model()
+net = net.eval()
 
-bboxes = detector(image)
-image  = draw_bboxes(image, bboxes)
-cv2.imwrite("demo_out.jpg", image)
+size = 511  # [255, 306, 357, 408, 459, 511]
+input_shape = [1, 3, size, size]
+input_data = torch.randn(input_shape)
+scripted_net = torch.jit.trace(net, [input_data]).eval()
+scripted_net.save("cache/squeeze_{0}.pt".format(size))

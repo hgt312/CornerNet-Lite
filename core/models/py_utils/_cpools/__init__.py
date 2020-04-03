@@ -71,4 +71,4 @@ class LeftPool(nn.Module):
 
 class RightPool(nn.Module):
     def forward(self, x):
-        return torch.ops.corner_pools.left(x)
+        return torch.ops.corner_pools.right(x)

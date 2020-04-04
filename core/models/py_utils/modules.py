@@ -140,7 +140,7 @@ class hg_net(nn.Module):
         tl_tag,  br_tag  = self.tl_tags[-1](tl_mod),  self.br_tags[-1](br_mod)
         tl_off,  br_off  = self.tl_offs[-1](tl_mod),  self.br_offs[-1](br_mod)
 
-        outs = [tl_heat, br_heat, tl_tag, br_tag, tl_off, br_off]
+        outs = (tl_heat, br_heat, tl_tag, br_tag, tl_off, br_off)
         # return self._decode(*outs, **kwargs), tl_heat, br_heat, tl_tag, br_tag
         return outs
 

@@ -63,7 +63,7 @@ class TopPool(nn.Module):
 
 class BottomPool(nn.Module):
     def forward(self, x):
-        return torch.ops.corner_pools.buttom(x)
+        return torch.ops.corner_pools.bottom(x)
 
 class LeftPool(nn.Module):
     def forward(self, x):

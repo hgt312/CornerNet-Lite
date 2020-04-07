@@ -16,3 +16,8 @@ with torch.no_grad():
 ops = torch.jit.export_opnames(scripted_net)
 with open("cache/model_ops.yaml", 'w') as output:
     yaml.dump(ops, output)
+
+graph = scripted_net.graph.copy()
+torch._C._jit_pass_inline(graph)
+with open("cache/graph.txt", 'w') as f:
+    f.write(str(graph))
